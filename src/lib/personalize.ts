@@ -1,4 +1,5 @@
 import cheerio from 'cheerio';
+import { VM } from 'vm2';
 
 type Primitive = number | null | string;
 export type PersonalizationValue = Primitive | readonly Primitive[];
@@ -8,8 +9,14 @@ export type PersonalizeOptions = {
   // TODO: JSON-LD of relevant tests? or maybe supply a/b test config with cookie and ratios and groups?
   readonly abTests?: { readonly [key: string]: string };
 
-  readonly personalizationSelector?: string;
-  readonly abTestSelector?: string;
+  /**
+   * @default data-edge-personalize
+   */
+  readonly personalizationAttribute?: string;
+  /**
+   * @default data-edge-ab-test
+   */
+  readonly abTestAttribute?: string;
 };
 
 /**
@@ -21,15 +28,43 @@ export type PersonalizeOptions = {
 export const personalize = (html: string, options: PersonalizeOptions = {}) => {
   const $ = cheerio.load(html);
 
-  const personalizationSelector =
-    options.personalizationSelector || '[data-edge-personalize]';
-  const abTestSelector =
-    options.personalizationSelector || '[data-edge-ab-test]';
+  const personalizationAttribute =
+    options.personalizationAttribute || 'data-edge-personalize';
+  const abTestAttribute =
+    options.personalizationAttribute || 'data-edge-ab-test';
 
-  $(`template${personalizationSelector}`).each((_index, el) => {
-    $(el).remove();
+  $(`template[${personalizationAttribute}]`).each((_index, el) => {
+    const $el = $(el);
+    const possibleMatches = $($el.html());
+    const defaultMatch = $el.next();
+    if (!defaultMatch.has(personalizationAttribute)) {
+      throw new Error('No default personalization found');
+    }
+    let match: cheerio.Cheerio | null = null;
+    const vm = new VM({
+      sandbox: {
+        userAttributes: options.userAttributes,
+      },
+    });
+
+    for (const child of possibleMatches.toArray()) {
+      const $child = $(child);
+      const expression = $child.attr(personalizationAttribute);
+      if (!expression) {
+        console.warn('No expression found for element', $.html(child));
+        continue;
+      }
+      if (vm.run(expression)) {
+        match = $child;
+        break;
+      }
+    }
+    if (match) {
+      defaultMatch.replaceWith($.html(match));
+    }
+    $el.remove();
   });
-  $(`template${abTestSelector}`).each((_index, el) => {
+  $(`template[${abTestAttribute}]`).each((_index, el) => {
     $(el).remove();
   });
 

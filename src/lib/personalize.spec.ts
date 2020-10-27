@@ -19,11 +19,14 @@ test('personalize', async (t) => {
           `
             <div class="foo">
               <template data-edge-personalize>
+                <div data-edge-personalize="userAttributes.gender === 'woman'">
+                  Hello mam
+                </div>
                 <div data-edge-personalize="userAttributes.gender === 'man'">
                   Hello sir
                 </div>
-                <div data-edge-personalize="userAttributes.gender === 'woman'">
-                  Hello mam
+                <div data-edge-personalize="userAttributes.gender === 'other'">
+                  Hello there
                 </div>
               </template>
               <div data-edge-personalize="default">
@@ -42,7 +45,7 @@ test('personalize', async (t) => {
     normalize(
       wrapTemplate(`
         <div class="foo">
-          <div data-edge-personalize="default">Hello there</div>
+          <div data-edge-personalize="userAttributes.gender === 'man'">Hello sir</div>
         </div>
       `)
     )
