@@ -75,36 +75,40 @@ Into
 To generate (and hydrate) in this format, e.g. for Gatsby, Next.js, or other Reat frameworks, you can create your own custom renderer, or use your React component
 
 ```tsx
-import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/react';
+import {
+  EdgePersonalize,
+  When,
+  Default,
+} from '@builder.io/edge-personalize/react';
 
 export const PersonalizedComponent = () => (
   <EdgePersonalize id="gendered-greeting">
-    <When expr="viewer.gender === 'men'">
-      Mens content
-    </When>
-    <Default>
-      Default content
-    <Default>
+    <When expr="viewer.gender === 'men'">Mens content</When>
+    <Default>Default content</Default>
   </EdgePersonalize>
-)
+);
 ```
 
 A/B tests:
 
 ```tsx
-import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/react';
+import { EdgeABTest, Group, Default } from '@builder.io/edge-personalize/react';
 
-export const PersonalizedComponent = () => (
-  <EdgeABTest id="cta-test" duration="30d">
+export const ABTestedComponent = () => (
+  <EdgeABTest
+    id="cta-test"
+    duration="30d"
+    onLoad={({ group }) => {
+      // Track which test group was viewed
+    }}
+  >
     <Group percent={20} name="free-promo">
       Sign up free
     </Group>
     <Group percent={20} name="fast-promo">
       Sign up fast
     </Group>
-    <Default>
-      Sign up now
-    <Default>
-  </EdgePersonalize>
-)
+    <Default>Sign up now</Default>
+  </EdgeABTest>
+);
 ```
