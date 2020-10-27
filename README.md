@@ -11,12 +11,16 @@ E.g. in an AWS lambda `viewer response` function over your static site or page
 import { personalize } from '@builder.io/edge-personalize';
 
 export const handler = (ctx) => {
-  const response = event.Records[0].cf.response;
+  const { request, response } = event.Records[0].cf;
   const html = response.body;
-  const newHtml = personalize(html, viewer: { gender: 'male' }, abTests: { 'cta-test': 'free-promo' });
+  const newHtml = personalize(html, {
+    // E.g. parse these from cookie headers
+    viewer: { gender: 'male' },
+    abTests: { 'cta-test': 'free-promo' },
+  });
   response.body = newHtml;
   return response;
-}
+};
 ```
 
 ### Personalizations
