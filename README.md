@@ -14,7 +14,7 @@ export const handler = (ctx) => {
   const { request, response } = event.Records[0].cf;
   const html = response.body;
   const newHtml = personalize(html, {
-    // E.g. parse these from cookie header
+    // E.g. parse these from cookie header - request.headers.cookie?.[0]?.Value
     viewer: { gender: 'male' },
     abTests: { 'cta-test': 'free-promo' },
   });
