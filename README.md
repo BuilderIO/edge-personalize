@@ -72,7 +72,7 @@ Into
 
 ## React support (WIP)
 
-To generate (and hydrate) in this format, e.g. for Gatsby, Next.js, or other Reat frameworks, you can create your own custom renderer, or use your React component
+To generate (and hydrate) in this format, e.g. for Gatsby, Next.js, or other React frameworks, you can create your own custom renderer, or use your React component
 
 ```tsx
 import {
