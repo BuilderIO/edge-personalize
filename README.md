@@ -1,6 +1,6 @@
 # Edge-personalize
 
-Personalize static generated pages at the edge. Get the performance and uptime of static
+Personalize and a/b test static generated pages at the edge. Get the performance and uptime of static
 generation, with the personalization of server side rendering
 
 ## Usage
@@ -14,7 +14,7 @@ export const handler = (ctx) => {
   const { request, response } = event.Records[0].cf;
   const html = response.body;
   const newHtml = personalize(html, {
-    // E.g. parse these from cookie headers
+    // E.g. parse these from cookie header
     viewer: { gender: 'male' },
     abTests: { 'cta-test': 'free-promo' },
   });
@@ -72,7 +72,7 @@ Into
 
 ## React support
 
-To generate (and hydrate) in this format, you can create your own custom renderer, or use your React component
+To generate (and hydrate) in this format, e.g. for Gatsby, Next.js, or other Reat frameworks, you can create your own custom renderer, or use your React component
 
 ```tsx
 import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/react';
