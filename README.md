@@ -47,12 +47,14 @@ To generate in this format, you can create your own custom renderer, or use your
 ```tsx
 import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/react';
 
-<EdgePersonalize>
-  <When expr="userAttributes.gender === 'men'">
-    Mens content
-  </When>
-  <Default>
-    Default content
-  <Default>
-</EdgePersonalize>
+export const PersonalizedComponent = () => (
+  <EdgePersonalize>
+    <When expr="userAttributes.gender === 'men'">
+      Mens content
+    </When>
+    <Default>
+      Default content
+    <Default>
+  </EdgePersonalize>
+)
 ```
