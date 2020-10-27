@@ -1,3 +1,3 @@
-# @builder.io/edge-personalize
+# Edge-personalize
 
 Personalize static generated pages at the edge
