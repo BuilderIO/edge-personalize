@@ -11,7 +11,7 @@ E.g. in an AWS lambda `viewer response` function over your static site or page
 export const handler = (ctx) => {
   const response = event.Records[0].cf.response;
   const html = response.body;
-  const newHtml = personalize(html, userAttributes: { gender: 'male' })
+  const newHtml = personalize(html, viewer: { gender: 'male' })
   response.body = newHtml
   return response;
 }
@@ -22,13 +22,9 @@ This turns static markup like
 ```html
 <div class="foo">
   <template data-edge-personalize>
-    <div data-edge-personalize="userAttributes.gender === 'woman'">
-      Hello mam
-    </div>
-    <div data-edge-personalize="userAttributes.gender === 'man'">Hello sir</div>
-    <div data-edge-personalize="userAttributes.gender === 'other'">
-      Hello there
-    </div>
+    <div data-edge-personalize="viewer.gender === 'woman'">Hello mam</div>
+    <div data-edge-personalize="viewer.gender === 'man'">Hello sir</div>
+    <div data-edge-personalize="viewer.gender === 'other'">Hello there</div>
   </template>
   <div data-edge-personalize="default">Hello there</div>
 </div>
@@ -49,7 +45,7 @@ import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/rea
 
 export const PersonalizedComponent = () => (
   <EdgePersonalize>
-    <When expr="userAttributes.gender === 'men'">
+    <When expr="viewer.gender === 'men'">
       Mens content
     </When>
     <Default>

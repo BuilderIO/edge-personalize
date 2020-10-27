@@ -5,7 +5,7 @@ type Primitive = number | null | string;
 export type PersonalizationValue = Primitive | readonly Primitive[];
 
 export type PersonalizeOptions = {
-  readonly userAttributes?: { readonly [key: string]: PersonalizationValue };
+  readonly viewer?: { readonly [key: string]: PersonalizationValue };
   // TODO: JSON-LD of relevant tests? or maybe supply a/b test config with cookie and ratios and groups?
   readonly abTests?: { readonly [key: string]: string };
 
@@ -43,7 +43,7 @@ export const personalize = (html: string, options: PersonalizeOptions = {}) => {
     let match: cheerio.Cheerio | null = null;
     const vm = new VM({
       sandbox: {
-        userAttributes: options.userAttributes,
+        viewer: options.viewer,
       },
     });
 
