@@ -5,6 +5,7 @@
     "outDir": "build/main",
     "rootDir": "src",
     "moduleResolution": "node",
+    "jsx": "react",
     "module": "commonjs",
     "declaration": true,
     "inlineSourceMap": true,
@@ -14,7 +15,7 @@
     "strict": true /* Enable all strict type-checking options. */,
 
     /* Strict Type-Checking Options */
-    // "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
+    "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
     // "strictNullChecks": true /* Enable strict null checks. */,
     // "strictFunctionTypes": true /* Enable strict checking of function types. */,
     // "strictPropertyInitialization": true /* Enable strict checking of property initialization in classes. */,
@@ -37,11 +38,11 @@
     // "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
     // "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */,
 
-    "lib": ["es2017"],
+    "lib": ["es2017", "DOM"],
     "types": ["node"],
     "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/react/index.tsx"],
   "exclude": ["node_modules/**"],
   "compileOnSave": false
 }

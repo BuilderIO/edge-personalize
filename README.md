@@ -8,16 +8,20 @@ generation, with the personalization of server side rendering
 E.g. in an AWS lambda `viewer response` function over your static site or page
 
 ```ts
+import { personalize } from '@builder.io/edge-personalize';
+
 export const handler = (ctx) => {
   const response = event.Records[0].cf.response;
   const html = response.body;
-  const newHtml = personalize(html, viewer: { gender: 'male' })
-  response.body = newHtml
+  const newHtml = personalize(html, viewer: { gender: 'male' }, abTests: { 'cta-test': 'free-promo' });
+  response.body = newHtml;
   return response;
 }
 ```
 
-This turns static markup like
+### Personalizations
+
+This turns static markup like:
 
 ```html
 <div class="foo">
@@ -38,18 +42,64 @@ into:
 </div>
 ```
 
-To generate in this format, you can create your own custom renderer, or use your React component
+### A/B tests:
+
+Turns
+
+```html
+<button class="foo">
+  <template data-edge-ab-test="cta-test" duration="30d">
+    <div data-edge-ab-test="free-promo" data-edge-ab-test-percent="20">
+      Sign up free
+    </div>
+    <div data-edge-ab-test="fast-promo" data-edge-ab-test-percent="20">
+      Sign up fast
+    </div>
+  </template>
+  <div data-edge-ab-test="default">Sign up now</div>
+</button>
+```
+
+Into
+
+```html
+<button class="foo"><div>Sign up free</div></button>
+```
+
+## React support
+
+To generate (and hydrate) in this format, you can create your own custom renderer, or use your React component
 
 ```tsx
 import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/react';
 
 export const PersonalizedComponent = () => (
-  <EdgePersonalize>
+  <EdgePersonalize id="gendered-greeting">
     <When expr="viewer.gender === 'men'">
       Mens content
     </When>
     <Default>
       Default content
+    <Default>
+  </EdgePersonalize>
+)
+```
+
+A/B tests:
+
+```tsx
+import { EdgePersonalize, When, Default } from '@builder.io/edge-personalize/react';
+
+export const PersonalizedComponent = () => (
+  <EdgeABTest id="cta-test" duration="30d">
+    <Group percent={20} name="free-promo">
+      Sign up free
+    </Group>
+    <Group percent={20} name="fast-promo">
+      Sign up fast
+    </Group>
+    <Default>
+      Sign up now
     <Default>
   </EdgePersonalize>
 )
