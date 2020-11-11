@@ -112,3 +112,8 @@ export const ABTestedComponent = () => (
   </EdgeABTest>
 );
 ```
+
+<br />
+<p align="center">
+  Made with ❤️ by <a target="_blank" href="https://www.builder.io/">Builder.io</a>
+</p>
